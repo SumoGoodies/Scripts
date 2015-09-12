@@ -9,6 +9,7 @@
 
 ' Sumo FER
 ' To be provided, contact author.
+' see how to configure the script in sumo, see https://docs.google.com/document/d/1mMCZGD6t8F9unUFSCaCIzt3wmleF-6VBKbBBc4CQsh4
 
 option explicit
 Dim Connection
