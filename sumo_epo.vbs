@@ -7,6 +7,9 @@
 ' Configure the DATEADD matches with the run interval in Sumo Source.  The script use SQL DateAdd(datepart, num, date)
 ' dd = day, mi=minute, hh=hour
 
+' Sumo FER
+' To be provided, contact author.
+
 option explicit
 Dim Connection
 Dim ConnectionString
