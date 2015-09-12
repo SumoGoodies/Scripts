@@ -5,6 +5,7 @@
 ' update the Server, Database UserID, and Pwd.  <<The SQL Server needs to run in mix-authentication mode>>
 ' SELECT the fields to be polled from the DB view or tables.
 ' Configure the DATEADD matches with the run interval in Sumo Source.
+' see how to configure this in sumo: https://docs.google.com/document/d/1mMCZGD6t8F9unUFSCaCIzt3wmleF-6VBKbBBc4CQsh4
 ' ---------
 
 option explicit
