@@ -25,12 +25,17 @@ Dim Server, Database, UserId, Pwd, outFile, objFSO, objFile
 
 Server = "WIN_SQLServer"
 Database = "epo_Win_SQLServer"
+' the following two lines are needed if you are using SQL Server authentication
 UserId = "sa"
 Pwd = "blabhal"
 
 Set Connection = CreateObject("ADODB.Connection")
 ' the EPOServer is the instance name, may not needed
 ConnectionString = "Driver={SQL Server};Server=" & Server & "\EPOSERVER;Database=" & Database & ";Uid=" & UserId & ";Pwd=" & Pwd
+
+' if you are use Native Windows authentication, use the following
+' ConnectionString = "Driver={SQL Server};Server=" & Server & "\EPOSERVER;Database=" & Database & ";Trusted_Connection=yes" 
+
 Connection.Open ConnectionString
 
 Set Recordset = CreateObject("ADODB.Recordset")
