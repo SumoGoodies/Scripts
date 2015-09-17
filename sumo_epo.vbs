@@ -2,7 +2,7 @@
 ' Script is provided 'as is' with no warranty of any kind.  
 
 ' 1. Save the following into a file, ie: c:\sumo_epo.vbs
-' 2. update the Server, Database UserID, and Pwd.  <<The SQL Server needs to run in mix-authentication mode>>
+' 2. update the Server, Database UserID, and Pwd.  or you can configure the collector to run under a service account.
 ' 3. SELECT the fields to be polled from the DB view or tables.
 ' Configure the DATEADD matches with the run interval in Sumo Source.  The script use SQL DateAdd(datepart, num, date)
 ' dd = day, mi=minute, hh=hour
