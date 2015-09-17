@@ -10,6 +10,9 @@
 ' Sumo FER
 ' To be provided, contact author.
 ' see how to configure the script in sumo, see https://docs.google.com/document/d/1mMCZGD6t8F9unUFSCaCIzt3wmleF-6VBKbBBc4CQsh4
+'
+' In sumo collector source config, you will need to setup a multi-line boundary condition as 
+'  ^\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{1,2}:\d{1,2}.*
 
 option explicit
 Dim Connection
