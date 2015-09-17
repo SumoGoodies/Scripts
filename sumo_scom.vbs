@@ -40,7 +40,7 @@ do until Recordset.EOF
     for each Field in Recordset.Fields
         'skip binary type fields - 204, 205
         if Field.Type <> 204 and Field.Type <> 205 Then
-            RecordString = RecordString & "{" & Field.name & ":" & Field.value & "} "
+            RecordString = RecordString & "{" & Field.name & "=>" & Field.value & "} "
         End If
         next
     objFile.WriteLine RecordString
