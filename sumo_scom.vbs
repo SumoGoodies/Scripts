@@ -2,7 +2,8 @@
 ' Script is provided 'as is' with no warranty of any kind.
 
 ' Save the following into a file, ie: c:\sumo_scom.vbs
-' update the Server, Database UserID, and Pwd.  <<The SQL Server needs to run in mix-authentication mode>>
+' update the Server, Database UserID, and Pwd.  If you don't want to save the password in the script, use windows authentication instead.
+' consult with the sumo_epo script in the same directory.
 ' SELECT the fields to be polled from the DB view or tables.
 ' Configure the DATEADD matches with the run interval in Sumo Source.
 ' see how to configure this in sumo: https://docs.google.com/document/d/1mMCZGD6t8F9unUFSCaCIzt3wmleF-6VBKbBBc4CQsh4
