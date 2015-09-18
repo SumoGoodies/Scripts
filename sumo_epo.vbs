@@ -5,6 +5,7 @@
 ' 2. update the Server, Database UserID, and Pwd.  or you can configure the collector to run under a service account.
 ' 3. SELECT the fields to be polled from the DB view or tables.
 ' Configure the DATEADD matches with the run interval in Sumo Source.  The script use SQL DateAdd(datepart, num, date)
+' considering UTC time differences
 ' dd = day, mi=minute, hh=hour
 
 ' Sumo FER
@@ -41,7 +42,7 @@ Connection.Open ConnectionString
 Set Recordset = CreateObject("ADODB.Recordset")
 
 'assumes poll every 5 minutes.
-SQLQuery = "SELECT AutoID,ServerID,ReceivedUTC,DetectedUTC,ThreatCategory,ThreatEventID,ThreatSeverity,ThreatName,ThreatType,ThreatActionTaken,ThreatHandled,AnalyzerName,AnalyzerHostName,SourceProcessName,SourceURL,TargetHostName,TargetFileName FROM EPOEvents where receivedUTC > DATEADD(mi, -5, GETDATE())"
+SQLQuery = "SELECT AutoID,ServerID,ReceivedUTC,DetectedUTC,ThreatCategory,ThreatEventID,ThreatSeverity,ThreatName,ThreatType,ThreatActionTaken,ThreatHandled,AnalyzerName,AnalyzerHostName,SourceProcessName,SourceURL,TargetHostName,TargetFileName FROM EPOEvents where receivedUTC > DATEADD(mi, -5, GETUTCDATE())"
 
 Set objFSO=CreateObject("Scripting.FileSystemObject")
 Set objFile = objFSO.GetStandardStream(1)
