@@ -32,10 +32,10 @@ Pwd = "blabhal"
 
 Set Connection = CreateObject("ADODB.Connection")
 ' the EPOServer is the instance name, may not needed
-ConnectionString = "Driver={SQL Server};Server=" & Server & "\EPOSERVER;Database=" & Database & ";Uid=" & UserId & ";Pwd=" & Pwd
+ConnectionString = "Driver={SQL Server};Server=" & Server & ";Database=" & Database & ";Uid=" & UserId & ";Pwd=" & Pwd
 
 ' if you are use Native Windows authentication, use the following
-' ConnectionString = "Driver={SQL Server};Server=" & Server & "\EPOSERVER;Database=" & Database & ";Trusted_Connection=yes" 
+' ConnectionString = "Driver={SQL Server};Server=" & Server & ";Database=" & Database & ";Trusted_Connection=yes" 
 
 Connection.Open ConnectionString
 
