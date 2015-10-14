@@ -1,0 +1,5 @@
+{ "query" : "666 AND 3127 | fields -_collector,_size,_receipttime,_source ", 
+  "from" : "2015-06-22T17:00:00", 
+  "to" : "2015-06-22T18:00:00", 
+  "timeZone" : "CST" 
+}
