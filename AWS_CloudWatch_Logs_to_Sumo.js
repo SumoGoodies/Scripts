@@ -39,11 +39,12 @@ exports.handler = function(event, context) {
                       context.fail();
                   }
                 });
-                request.end(buf, function() {
+                request.write(buf, function() {
                     // done
                     console.log("Sent to Sumo!");
                     context.done();
-                })
+                });
+                request.end()
             }
         })
 };
