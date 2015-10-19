@@ -30,21 +30,23 @@ exports.handler = function(event, context) {
                 console.log("Received " + result.logEvents.length + " log events.");
                 for(var i in result.logEvents) {
                    buf +=JSON.stringify(result.logEvents[i])+"\n";
-				}
+		}
             	options.headers['Content-Length']=buf.length;
+            	var body = '';
                 var request = https.request(options, function(response) {
-                  console.log('STATUS: ' + response.statusCode);
-                  if (response.statusCode != 200) {
-                      context.fail();
-                  } else {
-            		response.on('data', function(chunk) {
-                		body += chunk;
-            		});
-            		response.on('end', function() {
-                		console.log('Successfully processed HTTPS response');
-				context.succeed();
-            		});  
-                }});
+                	console.log('STATUS: ' + response.statusCode);
+                  	if (response.statusCode != 200) {
+                      		context.fail();
+                  	} else {
+            			response.on('data', function(chunk) {
+                			body += chunk;
+            			});
+            			response.on('end', function() {
+                			console.log('Successfully processed HTTPS response');
+					context.succeed();
+            			});  
+                	}
+                });
                 request.write(buf);
                 request.end()
             }
