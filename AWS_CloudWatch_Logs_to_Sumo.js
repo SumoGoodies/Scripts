@@ -19,7 +19,6 @@ var options = {
     }
 };
 var buf=new Buffer('');
-var send_flag=false;
 
 exports.handler = function(event, context) {
     var payload = new Buffer(event.awslogs.data, 'base64');
@@ -37,13 +36,16 @@ exports.handler = function(event, context) {
                   console.log('STATUS: ' + response.statusCode);
                   if (response.statusCode != 200) {
                       context.fail();
-                  }
-                });
-                request.write(buf, function() {
-                    // done
-                    console.log("Sent to Sumo!");
-                    context.done();
-                });
+                  } else {
+            		response.on('data', function(chunk) {
+                		body += chunk;
+            		});
+            		response.on('end', function() {
+                		console.log('Successfully processed HTTPS response');
+				context.succeed();
+            		});  
+                }});
+                request.write(buf);
                 request.end()
             }
         })
