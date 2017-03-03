@@ -30,3 +30,11 @@ This program output THREE files:
 mule2sumo.log : contains the activity log
 mule2sumo.marker : contains markers for each deployment_id
 mule-xxxxx-yyyyy.out : which are temp log files from Mulesoft's Cloudhub to be uploaded
+
+
+
+------------------ Requirements --------------
+Installing Python runtime
+
+pip install requests
+pip install simplejson
