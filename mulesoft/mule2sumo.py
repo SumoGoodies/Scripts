@@ -111,7 +111,7 @@ for domain in jsonResponse :
 
 # STEP 3: for each active domain, we'll find the active deploymentID
 for domain in domainNames :
-    requestOut = session.get(applicationURL+"/"+str(domain) + "/deployments", headers=queryHeaders)
+    requestOut = session.get(applicationURL+"/"+str(domain) + "/deployments?orderByDate=DESC", headers=queryHeaders)
     # Check to make sure it was authenicated successfully
     if requestOut.status_code < 200 or requestOut.status_code > 299:
         logMsg(logFile, "Failed to request deployments:  " + str(requestOut.status_code))
