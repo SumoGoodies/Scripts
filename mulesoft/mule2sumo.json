@@ -1,6 +1,6 @@
 {
-  "sumo_url": "https://endpoint1.collection.us2.sumologic.com/receiver/v1/http/ZaVnC4dhaVwHhmphLl25TgyYXA6wMpiFl-yJ9kAKG7UBGtChqHBl6Wi9qb9QrebFdL3F1xU18uFRPEEyoOBjuybhgouNl_OSs8msUw==",
-  "domain": "sumo",
+  "environment":"xyz"
+  "domain": [{"name","*"},{"name","abc"},{"name":"blah"}],
   "application_url": "https://anypoint.mulesoft.com/cloudhub/api/v2/applications",
   "auth": "https://anypoint.mulesoft.com/accounts/login",
   "username": "monty",
