@@ -1,6 +1,6 @@
 {
   "environment":"xyz"
-  "domain": [{"name","*"},{"name","abc"},{"name":"blah"}],
+  "domain": [{"name":"*"},{"name":"abc"},{"name":"blah"}],
   "application_url": "https://anypoint.mulesoft.com/cloudhub/api/v2/applications",
   "auth": "https://anypoint.mulesoft.com/accounts/login",
   "username": "monty",
