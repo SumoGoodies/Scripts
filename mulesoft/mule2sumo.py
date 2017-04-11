@@ -141,12 +141,13 @@ if requestOut.status_code < 200 or requestOut.status_code > 299:
 
 jsonResponse = requestOut.json()
 
-
 for domain in jsonResponse :
     # go through the configed domain names looking for matches
     for domainName in domNames:
-        if (str(domainName["name"]) in domain["domain"] and domain["status"].startswith("STARTED")) :
-            domainNames.append(domain["domain"])
+        if ((str(domainName["name"]) in domain["domain"] or str(domainName["name"]=="*")) and domain["status"].startswith("STARTED")) :
+            # check if domain already existed in the list
+            if not(domain["domain"] in domainNames) :
+                domainNames.append(domain["domain"])
 
 # STEP 3: for each active domain, we'll find the active deploymentID
 for domain in domainNames :
@@ -217,7 +218,6 @@ for domain in domainList :
 
 # STEP 5:  Upload the logs into Sumo
 # The data will be loaded into Sumo by the collector
-
 
 # Save the marker file
 try:
