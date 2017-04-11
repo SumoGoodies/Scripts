@@ -73,6 +73,8 @@ session = requests.Session()
 # Need to tell the web server we're sending JSON
 queryHeaders = {"Content-Type": "application/json"}
 authURL = str(apiData["auth"])
+environment = str(apiData["environment"])
+domNames = apiData["domain"]
 # Credentials
 credData={"username":str(apiData["username"]),"password":str(apiData["password"])}
 
@@ -95,8 +97,42 @@ tokenType = jsonResponse["token_type"]
 queryHeaders={"Content-Type": "application/json","Authorization":str(tokenType)+" "+str(accessToken)}
 applicationURL=str(apiData["application_url"])
 
+# STEP 1.5: Find the self-org ID and the matching Environment
+meURL="https://anypoint.mulesoft.com/accounts/api/me"
+requestOut = session.get(meURL, headers=queryHeaders)
+# Check to make sure it was requested successfully
+if requestOut.status_code < 200 or requestOut.status_code > 299:
+    logMsg(logFile, "Failed to get me info:  " + str(requestOut.status_code))
+    sys.exit(1)
+
+jsonResponse = requestOut.json()
+orgID = jsonResponse["user"]["organization"]["id"]
+logMsg(logFile,"my orgID= " + orgID)
+
+# STEP 1.6: Find the environment ID
+envURL="https://anypoint.mulesoft.com/accounts/api/organizations/" + orgID + "/environments"
+requestOut = session.get(envURL, headers=queryHeaders)
+# Check to make sure it was requested successfully
+if requestOut.status_code < 200 or requestOut.status_code > 299:
+    logMsg(logFile, "Failed to get me info:  " + str(requestOut.status_code))
+    sys.exit(1)
+
+envID=""
+jsonResponse = requestOut.json()
+for data in jsonResponse["data"] :
+    if (environment in data["name"]) :
+        envID=data["id"]
+        break
+
+if (len(envID) == 0) :
+    logMsg(logFile, "Can not find the environment id from org")
+    sys.exit(1)
+logMsg(logFile, "Matched EnvID = " + envID)
+
+queryHeaders["x-anypnt-env-id"] = envID
+queryHeaders["x-anypnt-org-id"] = orgID
+
 # STEP 2: Find the list of matching Domain (or applications) that are in started state
-domainName = str(apiData["domain"])
 requestOut = session.get(applicationURL, headers=queryHeaders)
 # Check to make sure it was authenicated successfully
 if requestOut.status_code < 200 or requestOut.status_code > 299:
@@ -105,9 +141,12 @@ if requestOut.status_code < 200 or requestOut.status_code > 299:
 
 jsonResponse = requestOut.json()
 
+
 for domain in jsonResponse :
-    if (domainName in domain["domain"] and domain["status"].startswith("STARTED")) :
-        domainNames.append(domain["domain"])
+    # go through the configed domain names looking for matches
+    for domainName in domNames:
+        if (str(domainName["name"]) in domain["domain"] and domain["status"].startswith("STARTED")) :
+            domainNames.append(domain["domain"])
 
 # STEP 3: for each active domain, we'll find the active deploymentID
 for domain in domainNames :
@@ -151,7 +190,7 @@ for domain in domainList :
 
     # Calling Mule
     while True:
-        payLoad = {"deploymentId": currentDeploymentID,"lowerId": lastRecord,"limit": 100}
+        payLoad = {"deploymentId": currentDeploymentID,"lowerId": lastRecord,"limit": 1000}
         requestOut = session.post(applicationURL + "/" + currentDomain + "/logs", headers=queryHeaders, json=payLoad)
 
         if requestOut.status_code < 200 or requestOut.status_code > 299:
@@ -168,52 +207,17 @@ for domain in domainList :
             # Loop through, write to local file one record at a time
             for record in jsonResponse :
                 jsonOutputFile.write(json.dumps(record)+ "\n")
+                jsonOutputFile.flush()
                 lastRecord = str(record["recordId"])
+                markerData[currentDeploymentID]=record["recordId"]
         logMsg(logFile,"last record=" + lastRecord)
     jsonOutputFile.close()
     logMsg(logFile, "Done processing domain = " + currentDomain)
 
 
 # STEP 5:  Upload the logs into Sumo
-sumoURL = str(apiData["sumo_url"])
-queryHeaders = {"Content-Type": "application/json","X-Sumo-Name":"","X-Sumo-Host":""}
+# The data will be loaded into Sumo by the collector
 
-# Open the JSON file
-dirs = os.listdir(".")
-for muleFile in dirs:
-    if muleFile.startswith("mule-") :
-        d1 = muleFile.find("-")+1
-        d2 = muleFile.rfind("-")
-        d3 = muleFile.find(".out")
-        currentDomain = muleFile[d1:d2]
-        currentDeploymentID = muleFile[d2+1:d3]
-    else :
-        continue
-
-    queryHeaders["X-Sumo-Name"] = currentDomain
-    queryHeaders["X-Sumo-Host"] = currentDeploymentID
-
-    try:
-        jsonInputFile = open(muleFile)
-    except IOError as ex:
-        exitError(logFile, "Error opening jsonFile:  " + str(ex), 1)
-        sys.exit(1)
-
-    jsonData = ""
-    for inputLine in jsonInputFile:
-        # Load the JSON data
-        jsonData = json.loads(inputLine)
-
-        requestOut = session.post(sumoURL, headers=queryHeaders, json=jsonData)
-        if requestOut.status_code < 200 or requestOut.status_code > 299:
-            logMsg(logFile, "Failed to upload:  " + str(requestOut.status_code))
-            break
-        else:
-            #update the last uploaded recordId
-            markerData[currentDeploymentID]=jsonData["recordId"]
-
-    # close the current file
-    jsonInputFile.close()
 
 # Save the marker file
 try:
