@@ -47,12 +47,6 @@ def getJsonData(jsonFileName):
         jsonData = {}
     return jsonData
 
-# Start logging
-try:
-    logFile = open(logFilePath, "a")
-except IOError as ex:
-    # Don't proceed if we can't log
-    sys.exit(1)
 
 # Clean up old logs from previous sessions
 # Open the JSON file
@@ -66,6 +60,31 @@ for muleFile in dirs:
 # Read input configs
 apiData = getJsonData(inputFile)
 markerData = getJsonData(markerFile)
+
+# Start logging
+# if same day, we append, if new date, we start a new one
+dateStamp = strftime("%Y-%m-%d", gmtime())
+try :
+    if (dateStamp in markerData["date"]) :
+        try:
+            logFile = open(logFilePath, "a")
+        except IOError as ex:
+            # Don't proceed if we can't log
+            sys.exit(1)
+    else :
+        markerData["date"] = dateStamp
+        try:
+            logFile = open(logFilePath, "w")
+        except IOError as ex:
+            # Don't proceed if we can't log
+            sys.exit(1)
+except KeyError as ex:
+    markerData["date"] = dateStamp
+    try:
+        logFile = open(logFilePath, "w")
+    except IOError as ex:
+        # Don't proceed if we can't log
+        sys.exit(1)
 
 # We need cookies to maintain the session
 session = requests.Session()
