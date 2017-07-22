@@ -14,6 +14,8 @@
 '
 ' In sumo collector source config, you will need to setup a multi-line boundary condition as 
 '  ^\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{1,2}:\d{1,2}.*
+'
+' 07/21/2017 NOTE: For DB running with named instance, the Server should be set to "myServerName\myInstanceName"
 
 option explicit
 Dim Connection
