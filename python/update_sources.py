@@ -51,7 +51,7 @@ for c in cs:
                 time.sleep(1)
                 su = json.loads(r.text)
                 etag = r.headers['etag']
-                su['source']['category'] = "prod_env"+catg[7:]
+                su['source']['category'] = "prod_env"+catg[7:] # this is what I wanted the new category to be, you use your own logic
                 headers = {"Content-Type": "application/json", "Accept" : "application/json", 'If-Match': etag}
                 print (json.dumps(su))
                 # the next line is where the UPDATE happens.. the whole JSON with modifiable fields must present for updates.
